@@ -30,8 +30,8 @@ import com.saplo.api.client.util.ClientUtil;
  */
 public class SaploCollectionManager {
 
-	private SaploClient client;
-	private ExecutorService es;
+	private final SaploClient client;
+	private final ExecutorService es;
 
 	/**
 	 * Constructor
