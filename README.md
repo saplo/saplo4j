@@ -5,7 +5,7 @@ This is an official Java client for the Saplo-API.
 
 Quickstart
 ----------
-
+```java
     // Connect to the Saplo-API
     SaploClient client = new SaploClient.Builder("API_KEY","SECRET_KEY").build();
 
@@ -47,6 +47,7 @@ Quickstart
     
     // Shut down the client
     client.shutdown();
+```
         
 For the rest of the API methods and examples, refer to http://developer.saplo.com/
     
