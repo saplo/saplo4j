@@ -1,4 +1,4 @@
-Saplo4java
+saplo4j
 =======
 
 This is an official Java client for the Saplo-API.
@@ -13,8 +13,9 @@ Quickstart
     ClientProxy proxy = new ClientProxy("host", 8080, "username", "password");
     SaploClient client = new SaploClient.Builder("API_KEY","SECRET_KEY").proxy(proxy).build();
     
-    // Create a manager to work with Collections
-    SaploCollectionManager collectionMgr = new SaploCollectionManager(client);
+    // Get a manager to work with Collections
+    SaploCollectionManager collectionMgr = client.getCollectionManager();
+    // alternatively: SaploCollectionManager collectionMgr = new SaploCollectionManager(client);
 
     // Create a new collection and store it in the API
     SaploCollection myCollection = new SaploCollection("My Collection Name", Language.en);
@@ -23,8 +24,9 @@ Quickstart
     // After a collection is successfully created, it is populated with an ID 
     int collectionId = myCollection.getId();
     
-    // Create a manager to handle Text
-    SaploTextManager textMgr = new SaploTextManager(client);
+    // Get a manager to handle Text
+    SaploTextManager textMgr = client.getTextManager();
+    // alternatively: SaploTextManager textMgr = new SaploTextManager(client);
 	
     // Create and save new Text
     SaploText myText = new SaploText(myCollection, "Body of My Text, but more meaningful");

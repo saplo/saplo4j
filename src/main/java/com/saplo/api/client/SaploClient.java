@@ -17,7 +17,11 @@ import com.saplo.api.client.entity.JSONRPCErrorObject;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
 import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.entity.SaploFuture;
+import com.saplo.api.client.manager.SaploAccountManager;
 import com.saplo.api.client.manager.SaploAuthManager;
+import com.saplo.api.client.manager.SaploCollectionManager;
+import com.saplo.api.client.manager.SaploGroupManager;
+import com.saplo.api.client.manager.SaploTextManager;
 import com.saplo.api.client.session.Session;
 import com.saplo.api.client.session.TransportRegistry;
 import com.saplo.api.client.session.impl.HTTPSSession;
@@ -37,7 +41,7 @@ public class SaploClient implements Serializable {
 
 	private static Session session;
 
-	private boolean ssl;
+	private final boolean ssl;
 	private final String endpoint;
 	private final String apiKey;
 	private final String secretKey;
@@ -120,6 +124,38 @@ public class SaploClient implements Serializable {
 		createSession(builder.accessToken, builder.proxy);
 		lock = new ReentrantLock();
 		sleeping = lock.newCondition();
+		
+		// create the managers
+		collectionMgr = new SaploCollectionManager(this);
+		textMgr = new SaploTextManager(this);
+		groupMgr = new SaploGroupManager(this);
+		authMgr = new SaploAuthManager(this);
+		accountMgr = new SaploAccountManager(this);
+	}
+	
+	private final SaploCollectionManager collectionMgr;
+	public SaploCollectionManager getCollectionManager() {
+		return collectionMgr;
+	}
+	
+	private final SaploTextManager textMgr;
+	public SaploTextManager getTextManager() {
+		return textMgr;
+	}
+	
+	private final SaploGroupManager groupMgr;
+	public SaploGroupManager getGroupManager() {
+		return groupMgr;
+	}
+	
+	private final SaploAuthManager authMgr;
+	public SaploAuthManager getAuthManager() {
+		return authMgr;
+	}
+	
+	private final SaploAccountManager accountMgr;
+	public SaploAccountManager getAccountManager() {
+		return accountMgr;
 	}
 	
 	private long lastReconnectAttempt = 0;
