@@ -26,7 +26,7 @@
 			<id>support</id>
 			<name>Saplo Support</name>
 			<email>support@saplo.com</email>
-			<organization>Saplo AB.</organization>
+			<organization>Saplo AB</organization>
 			<organizationUrl>http://saplo.com</organizationUrl>
 			<timezone>+2</timezone>
 		</developer>
@@ -121,7 +121,7 @@
 					<use>true</use>
 					<windowtitle>Saplo Java</windowtitle>
 					<doctitle><![CDATA[<h1>Saplo Java</h1>]]></doctitle>
-					<bottom><![CDATA[<i>Copyright &#169; 2012 Saplo, AB. All Rights Reserved.</i>]]></bottom>
+					<bottom><![CDATA[<i>Copyright &#169; 2012 Saplo AB. All Rights Reserved.</i>]]></bottom>
 				</configuration>
 				<executions>
 					<execution>
