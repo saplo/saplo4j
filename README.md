@@ -3,6 +3,16 @@ saplo4j
 
 This is an official Java client for the Saplo-API.
 
+Maven
+----------
+```xml
+<dependency>
+    <groupId>com.saplo</groupId>
+    <artifactId>saplo4j</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 Quickstart
 ----------
 ```java
