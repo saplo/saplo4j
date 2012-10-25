@@ -57,7 +57,6 @@ public class SaploGroupManager {
 	 * @throws SaploClientException 
 	 */
 	public void create(SaploGroup saploGroup) throws SaploClientException {
-		verifyId(saploGroup);
 		
 		if(saploGroup.getLanguage() == null)
 			throw new SaploClientException(MSG_CLIENT_FIELD, CODE_CLIENT_FIELD, "group.language");
