@@ -442,7 +442,9 @@ public class SaploGroupManager {
 
 		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		return (Boolean)client.parseResponse(response);
+		JSONObject result = (JSONObject)client.parseResponse(response);
+		
+		return result.optBoolean("success", false);
 	}
 
 	/**
