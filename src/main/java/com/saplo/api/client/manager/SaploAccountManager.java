@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import com.saplo.api.client.SaploClient;
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.entity.SaploAccount;
 
 /**
@@ -38,10 +37,11 @@ public class SaploAccountManager {
 		JSONObject params = new JSONObject();
 
 		JSONRPCRequestObject message = new JSONRPCRequestObject(client.getNextId(), "account.get", params);
-		JSONRPCResponseObject responseMessage = client.sendAndReceive(message);
+//		JSONRPCResponseObject responseMessage = client.sendAndReceive(message);
+		
+//		JSONObject rawResult = (JSONObject)client.parseResponse(responseMessage);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(responseMessage);
-
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(message);
 		return SaploAccount.convertFromJSONToAccount(rawResult);
 	}
 
@@ -71,10 +71,10 @@ public class SaploAccountManager {
 	public List<String> listMethods() throws SaploClientException {
 		JSONObject params = new JSONObject();
 
-		JSONRPCRequestObject message = new JSONRPCRequestObject(client.getNextId(), "saplo.listMethods", params);
-		JSONRPCResponseObject responseMessage = client.sendAndReceive(message);
+		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "saplo.listMethods", params);
+//		JSONRPCResponseObject responseMessage = client.sendAndReceive(message);
 
-		JSONArray rawResult = (JSONArray)client.parseResponse(responseMessage);
+		JSONArray rawResult = (JSONArray)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);
 
 		List<String> methods = new ArrayList<String>();
 		for(int i = 0; i < rawResult.length(); i++) {

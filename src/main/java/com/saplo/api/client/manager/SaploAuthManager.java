@@ -11,7 +11,6 @@ import com.saplo.api.client.ResponseCodes;
 import com.saplo.api.client.SaploClient;
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 
 /**
  * A manager class for Authorization methods
@@ -39,10 +38,10 @@ public class SaploAuthManager {
 		}
 		
 		JSONRPCRequestObject message = new JSONRPCRequestObject(client.getNextId(), "auth.accessToken", params);
-		JSONRPCResponseObject responseMessage = client.sendAndReceive(message);
+		Object rawResult = client.sendAndReceiveAndParseResponse(message);
 		
-		Object rawResult = client.parseResponse(responseMessage);
-
+//		Object rawResult = client.parseResponse(responseMessage);
+//		Object rawResult = client.sendAndReceiveAndParseResponse(message);
 		if(rawResult instanceof JSONObject)
 			accessToken = ((JSONObject) rawResult).opt("access_token").toString();
 		else

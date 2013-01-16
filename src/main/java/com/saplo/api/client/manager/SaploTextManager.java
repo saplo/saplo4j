@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import com.saplo.api.client.SaploClient;
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.entity.SaploCollection;
 import com.saplo.api.client.entity.SaploFuture;
 import com.saplo.api.client.entity.SaploGroup;
@@ -89,9 +88,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.create", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonText = (JSONObject)client.parseResponse(response);
+		JSONObject jsonText = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploText.convertFromJSONToText(jsonText, saploText);
 	}
@@ -187,9 +186,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.get", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonText = (JSONObject)client.parseResponse(response);
+		JSONObject jsonText = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploText.convertFromJSONToText(jsonText, saploText);
 	}
@@ -275,9 +274,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.update", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonText = (JSONObject)client.parseResponse(response);
+		JSONObject jsonText = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		SaploText.convertFromJSONToText(jsonText, saploText);
 	}
@@ -326,9 +325,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.delete", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject result = (JSONObject)client.parseResponse(response);
+		JSONObject result = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		return result.optBoolean("success", false);
 
@@ -406,9 +405,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.tags", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray tags = rawResult.getJSONArray("tags");
@@ -575,9 +574,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.relatedTexts", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray texts = rawResult.getJSONArray("related_texts");
@@ -735,9 +734,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.relatedGroups", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray groups = rawResult.getJSONArray("related_groups");
@@ -844,9 +843,9 @@ public class SaploTextManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "text.addTag", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request); //client.parseResponse(response);
 
 		return SaploTag.convertFromJSONToTag(rawResult);
 

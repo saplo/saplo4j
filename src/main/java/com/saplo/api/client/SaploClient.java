@@ -118,6 +118,13 @@ public class SaploClient implements Serializable {
 		ssl = builder.ssl;
 		endpoint = builder.endpoint;
 		
+		// create the managers
+		collectionMgr = new SaploCollectionManager(this);
+		textMgr = new SaploTextManager(this);
+		groupMgr = new SaploGroupManager(this);
+		authMgr = new SaploAuthManager(this);
+		accountMgr = new SaploAccountManager(this);
+		
 		es = Executors.newFixedThreadPool(20);
 		
 		this.setupServerEnvironment();
@@ -125,12 +132,6 @@ public class SaploClient implements Serializable {
 		lock = new ReentrantLock();
 		sleeping = lock.newCondition();
 		
-		// create the managers
-		collectionMgr = new SaploCollectionManager(this);
-		textMgr = new SaploTextManager(this);
-		groupMgr = new SaploGroupManager(this);
-		authMgr = new SaploAuthManager(this);
-		accountMgr = new SaploAccountManager(this);
 	}
 	
 	private final SaploCollectionManager collectionMgr;
@@ -194,7 +195,7 @@ public class SaploClient implements Serializable {
 	/*
 	 * FIXME fix, it's too complicated
 	 */
-	private synchronized boolean reAuthenticateSession() throws SaploClientException {
+	public synchronized boolean reAuthenticateSession() throws SaploClientException {
 
 		lock.lock();
 		try  {
@@ -211,6 +212,7 @@ public class SaploClient implements Serializable {
 			while(reconnectCount <= maxReconnectCount) {
 
 				try {
+					logger.info("attempt #"+reconnectCount);
 					// wait a bit before attempting to reconnect
 					long toSleep = (reconnectCount + 1) * reconnectTimeout;
 
@@ -244,7 +246,7 @@ public class SaploClient implements Serializable {
 	 * Get authenticated and save the access_token
 	 */
 	private void authenticateSession() throws SaploClientException {
-		SaploAuthManager auth = new SaploAuthManager(this);
+		SaploAuthManager auth = this.getAuthManager();
 		accessToken = auth.accessToken(apiKey, secretKey);
 
 		session.setParams("access_token=" + accessToken);
@@ -357,6 +359,33 @@ public class SaploClient implements Serializable {
 		return new SaploFuture<JSONRPCResponseObject>(es.submit(new Callable<JSONRPCResponseObject>() {
 			public JSONRPCResponseObject call() throws SaploClientException {
 				return sendAndReceive(request);
+			}
+		}));
+	}
+	
+	public Object sendAndReceiveAndParseResponse(JSONRPCRequestObject request) throws SaploClientException {
+		logger.debug(">>>>>>Sending request: " + request);
+		JSONRPCResponseObject response = (JSONRPCResponseObject)session.sendAndReceive(request);
+		logger.debug("<<<<<<Got response: " + response);
+		
+		Object object = null;
+		try {
+			object = parseResponse(response);
+		} catch(SaploClientException e) {
+			if(e.getErrorCode() == ResponseCodes.CODE_RECONNECTED) {
+				response = (JSONRPCResponseObject)session.sendAndReceive(request);
+				object = parseResponse(response);
+			}else {
+				throw e;
+			}
+		}
+		return object;
+	}
+	
+	public SaploFuture<Object> sendAndReceiveAndParseResponseAsync(final JSONRPCRequestObject request) {
+		return new SaploFuture<Object>(es.submit(new Callable<Object>() {
+			public Object call() throws SaploClientException {
+				return sendAndReceiveAndParseResponse(request);
 			}
 		}));
 	}

@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.saplo.api.client.SaploClient;
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.entity.SaploCollection;
 import com.saplo.api.client.entity.SaploFuture;
 import com.saplo.api.client.entity.SaploText;
@@ -70,9 +69,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.create", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonColl = (JSONObject)client.parseResponse(response);
+		JSONObject jsonColl = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploCollection.convertFromJSONToCollection(jsonColl, saploCollection);
 	}
@@ -142,9 +141,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.get", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonColl = (JSONObject)client.parseResponse(response);
+		JSONObject jsonColl = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploCollection.convertFromJSONToCollection(jsonColl, saploCollection);
 	}
@@ -207,9 +206,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.update", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonColl = (JSONObject)client.parseResponse(response);
+		JSONObject jsonColl = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		SaploCollection.convertFromJSONToCollection(jsonColl, saploCollection);
 	}
@@ -251,9 +250,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.delete", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonColl = (JSONObject)client.parseResponse(response);
+		JSONObject jsonColl = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploCollection.convertFromJSONToCollection(jsonColl, saploCollection);
 	}
@@ -305,9 +304,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.list", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawListResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawListResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		try {
 			JSONArray collections = rawListResult.getJSONArray("collections");
@@ -362,9 +361,9 @@ public class SaploCollectionManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "collection.reset", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonColl = (JSONObject)client.parseResponse(response);
+		JSONObject jsonColl = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		SaploCollection.convertFromJSONToCollection(jsonColl, saploCollection);
 	}

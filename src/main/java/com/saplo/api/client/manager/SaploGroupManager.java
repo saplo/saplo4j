@@ -3,10 +3,7 @@
  */
 package com.saplo.api.client.manager;
 
-import static com.saplo.api.client.ResponseCodes.CODE_CLIENT_FIELD;
-import static com.saplo.api.client.ResponseCodes.CODE_JSON_EXCEPTION;
-import static com.saplo.api.client.ResponseCodes.CODE_MALFORMED_RESPONSE;
-import static com.saplo.api.client.ResponseCodes.MSG_CLIENT_FIELD;
+import static com.saplo.api.client.ResponseCodes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,6 @@ import org.json.JSONObject;
 import com.saplo.api.client.SaploClient;
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.entity.SaploCollection;
 import com.saplo.api.client.entity.SaploFuture;
 import com.saplo.api.client.entity.SaploGroup;
@@ -73,9 +69,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.create", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonGroup = (JSONObject)client.parseResponse(response);
+		JSONObject jsonGroup = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		SaploGroup.convertFromJSONToGroup(jsonGroup, saploGroup);
 	}
@@ -151,9 +147,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.update", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonGroup = (JSONObject)client.parseResponse(response);
+		JSONObject jsonGroup = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		SaploGroup.convertFromJSONToGroup(jsonGroup, saploGroup);
 	}
@@ -194,9 +190,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.reset", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject jsonGroup = (JSONObject)client.parseResponse(response);
+		JSONObject jsonGroup = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		SaploGroup.convertFromJSONToGroup(jsonGroup, saploGroup);
 
@@ -239,9 +235,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.delete", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject result = (JSONObject)client.parseResponse(response);
+		JSONObject result = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		return result.optBoolean("success", false);
 	}
@@ -275,9 +271,9 @@ public class SaploGroupManager {
 		JSONObject params = new JSONObject();
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.list", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawJson = (JSONObject)client.parseResponse(response);
+		JSONObject rawJson = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		try {
 			JSONArray groups = rawJson.getJSONArray("groups");
@@ -330,9 +326,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.listTexts", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawJson = (JSONObject)client.parseResponse(response);
+		JSONObject rawJson = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray texts = rawJson.getJSONArray("texts");
@@ -390,9 +386,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.addText", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject result = (JSONObject)client.parseResponse(response);
+		JSONObject result = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 
 		return result.optBoolean("success", false);
 	}
@@ -440,9 +436,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.deleteText", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject result = (JSONObject)client.parseResponse(response);
+		JSONObject result = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(response);
 		
 		return result.optBoolean("success", false);
 	}
@@ -499,9 +495,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.relatedGroups", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray groups = rawResult.getJSONArray("related_groups");
@@ -600,9 +596,9 @@ public class SaploGroupManager {
 
 		JSONRPCRequestObject request = new JSONRPCRequestObject(client.getNextId(), "group.relatedTexts", params);
 
-		JSONRPCResponseObject response = client.sendAndReceive(request);
+//		JSONRPCResponseObject response = client.sendAndReceive(request);
 
-		JSONObject rawResult = (JSONObject)client.parseResponse(response);
+		JSONObject rawResult = (JSONObject)client.sendAndReceiveAndParseResponse(request);//client.parseResponse(responseMessage);client.parseResponse(response);
 
 		try {
 			JSONArray texts = rawResult.getJSONArray("related_texts");

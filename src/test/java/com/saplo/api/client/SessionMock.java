@@ -5,7 +5,6 @@ package com.saplo.api.client;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-//import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
@@ -16,7 +15,9 @@ import org.junit.Test;
 
 import com.saplo.api.client.entity.JSONRPCRequestObject;
 import com.saplo.api.client.entity.JSONRPCResponseObject;
+import com.saplo.api.client.manager.SaploAccountManager;
 import com.saplo.api.client.manager.SaploAuthManager;
+//import static org.mockito.Mockito.when;
 
 /**
  * @author progre55
@@ -40,4 +41,22 @@ public class SessionMock {
 	
 	
 	// TODO srsly need to write some tests when I have time
+	
+	@Test
+	public void testReconnection() throws SaploClientException, JSONException {
+		
+		SaploClient client = new SaploClient.Builder("apikey", "secretkey").accessToken("AT8413675556692900563").build();
+		SaploClient spyClient = spy(client);
+		SaploAccountManager saploAccountManager = new SaploAccountManager(spyClient);		
+		SaploAccountManager spySaploAccountManager = spy(saploAccountManager);
+		
+		SaploAuthManager mockSaploAuthManager = mock(SaploAuthManager.class);
+		
+		when(spyClient.getAccountManager()).thenReturn(spySaploAccountManager);
+		when(spyClient.getAuthManager()).thenReturn(mockSaploAuthManager);
+		when(mockSaploAuthManager.accessToken("apikey", "secretkey")).thenReturn("AT8413675556692900555");
+		
+		spyClient.getAccountManager().get();
+	}
+	
 }
