@@ -193,11 +193,11 @@ public class HTTPSessionApache implements Session {
 	 * 
 	 * @param proxy
 	 */
-	public void setProxy(ClientProxy proxy) {
-		if(null == proxy)
+	public void setProxy(ClientProxy clientProxy) {
+		if(null == clientProxy)
 			return;
 		
-		this.clientProxy = proxy;
+		this.clientProxy = clientProxy;
 		this.proxy = new HttpHost(clientProxy.getHost(), clientProxy.getPort());
 		if(clientProxy.isSecure()) {
 			proxyCredentials = new BasicCredentialsProvider();
@@ -207,7 +207,7 @@ public class HTTPSessionApache implements Session {
 			((DefaultHttpClient)httpClient).setCredentialsProvider(proxyCredentials);
 		}
 		
-		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, this.proxy);
 	}
 
 	/**
