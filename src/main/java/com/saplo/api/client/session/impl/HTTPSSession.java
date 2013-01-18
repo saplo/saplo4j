@@ -5,6 +5,7 @@ package com.saplo.api.client.session.impl;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -21,12 +22,12 @@ import com.saplo.api.client.session.TransportRegistry.SessionFactory;
  */
 public class HTTPSSession extends HTTPSessionApache {
 
-	public HTTPSSession(URI uri, String params) {
-		super(uri, params);
+	public HTTPSSession(URI uri, String params, Map<String, Object> httpParams) {
+		super(uri, params, httpParams);
 	}
 
-	public HTTPSSession(URI uri, String params, ClientProxy proxy) {
-		super(uri, params, proxy);
+	public HTTPSSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
+		super(uri, params, proxy, httpParams);
 	}
 
 	@Override
@@ -43,16 +44,16 @@ public class HTTPSSession extends HTTPSessionApache {
 	static class SessionFactoryImpl implements SessionFactory {
 		volatile HashMap<URI, Session> sessionMap = new HashMap<URI, Session>();
 		
-		public Session newSession(URI uri, String params, ClientProxy proxy) {
+		public Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
 			Session session = sessionMap.get(uri);
 			if (session == null) {
 				synchronized (sessionMap) {
 					session = sessionMap.get(uri);
 					if(session == null) {
 						if(null != proxy)
-							session = new HTTPSSession(uri, params, proxy);
+							session = new HTTPSSession(uri, params, proxy, httpParams);
 						else
-							session = new HTTPSSession(uri, params);
+							session = new HTTPSSession(uri, params, httpParams);
 						sessionMap.put(uri, session);
 					}
 				}

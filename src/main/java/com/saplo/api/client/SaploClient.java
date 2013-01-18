@@ -1,6 +1,8 @@
 package com.saplo.api.client;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,6 +11,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.http.params.CoreConnectionPNames;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +73,7 @@ public class SaploClient implements Serializable {
 		private String endpoint = DEFAULT_ENDPOINT;
 		private String accessToken = "";
 		private ClientProxy proxy = null;
+		private Map<String, Object> httpParams = new HashMap<String, Object>();
 		
 		public Builder(String apiKey, String secretKey) {
 			this.apiKey = apiKey;
@@ -93,6 +97,16 @@ public class SaploClient implements Serializable {
 		
 		public Builder proxy(ClientProxy proxy)
 		{ this.proxy = proxy;	return this; }
+		
+		public Builder socketTimeoutMillis(int socketTimeoutMillis) {
+			this.httpParams.put(CoreConnectionPNames.SO_TIMEOUT, socketTimeoutMillis);
+			return this;
+		}
+		
+		public Builder connectionTimeoutMillis(int connectionTimeoutMillis) {
+			this.httpParams.put(CoreConnectionPNames.CONNECTION_TIMEOUT, connectionTimeoutMillis);
+			return this;
+		}
 		
 		/**
 		 * Build a SaploClient with the specified params
@@ -128,7 +142,7 @@ public class SaploClient implements Serializable {
 		es = Executors.newFixedThreadPool(20);
 		
 		this.setupServerEnvironment();
-		createSession(builder.accessToken, builder.proxy);
+		createSession(builder.accessToken, builder.proxy, builder.httpParams);
 		lock = new ReentrantLock();
 		sleeping = lock.newCondition();
 		
@@ -181,9 +195,9 @@ public class SaploClient implements Serializable {
 	/*
 	 * Get authenticated and store the accessToken in the session
 	 */
-	private synchronized void createSession(String accToken, ClientProxy proxy) throws SaploClientException {
+	private synchronized void createSession(String accToken, ClientProxy proxy, Map<String, Object> httpParams) throws SaploClientException {
 		session = TransportRegistry.getTransportRegistryInstance()
-				.createSession(endpoint, "access_token=" + accToken, proxy);
+				.createSession(endpoint, "access_token=" + accToken, proxy, httpParams);
 
 		if(accToken != null && accToken.length() > 0) {
 			this.accessToken = accToken;

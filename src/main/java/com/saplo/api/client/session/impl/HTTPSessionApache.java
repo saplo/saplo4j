@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -28,6 +30,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +59,7 @@ public class HTTPSessionApache implements Session {
 	protected HttpHost proxy;
 	protected ClientProxy clientProxy;
 	protected CredentialsProvider proxyCredentials;
+	private Map<String, Object> httpParams;
 
 	/**
 	 * Main constructor
@@ -63,14 +67,15 @@ public class HTTPSessionApache implements Session {
 	 * @param endpoint - a saplo api endpoint
 	 * @param params - access_token="token_here"
 	 */
-	public HTTPSessionApache(URI endpoint, String params) {
+	public HTTPSessionApache(URI endpoint, String params, Map<String, Object> httpParams) {
 		this.endpoint = endpoint;
 		this.params = params;
+		this.httpParams = httpParams;
 		init();
 	}
-
-	public HTTPSessionApache(URI uri, String params, ClientProxy clientProxy) {
-		this(uri, params);
+	
+	public HTTPSessionApache(URI uri, String params, ClientProxy clientProxy, Map<String, Object> httpParams) {
+		this(uri, params, httpParams);
 		this.setProxy(clientProxy);
 	}
 
@@ -89,6 +94,14 @@ public class HTTPSessionApache implements Session {
 		cm.setMaxPerRoute(new HttpRoute(saploHost), 40);
 	
 		this.httpClient = new DefaultHttpClient(cm);
+		
+		//Set connection timeout params
+		HttpParams params = httpClient.getParams();
+		for(Iterator<String> iterator = this.httpParams.keySet().iterator(); iterator.hasNext();) {
+			String key = iterator.next();
+			params.setParameter(key, this.httpParams.get(key));
+		}
+
 	}
 	
 	/*
@@ -207,16 +220,16 @@ public class HTTPSessionApache implements Session {
 	static class SessionFactoryImpl implements SessionFactory {
 		volatile HashMap<URI, Session> sessionMap = new HashMap<URI, Session>();
 
-		public Session newSession(URI uri, String params, ClientProxy proxy) {
+		public Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
 			Session session = sessionMap.get(uri);
 			if (session == null) {
 				synchronized (sessionMap) {
 					session = sessionMap.get(uri);
 					if(session == null) {
 						if(proxy != null)
-							session = new HTTPSessionApache(uri, params, proxy);
+							session = new HTTPSessionApache(uri, params, proxy, httpParams);
 						else
-							session = new HTTPSessionApache(uri, params);
+							session = new HTTPSessionApache(uri, params, httpParams);
 						sessionMap.put(uri, session);
 					}
 				}
