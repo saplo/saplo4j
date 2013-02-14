@@ -49,6 +49,7 @@ public class SaploClient implements Serializable {
 	private final String apiKey;
 	private final String secretKey;
 	private String accessToken;
+	private final boolean connect;
 	
 	// an ES for handling "async" methods
 	private ExecutorService es;
@@ -74,6 +75,7 @@ public class SaploClient implements Serializable {
 		private String accessToken = "";
 		private ClientProxy proxy = null;
 		private Map<String, Object> httpParams = new HashMap<String, Object>();
+		private boolean connect = true;
 		
 		public Builder(String apiKey, String secretKey) {
 			this.apiKey = apiKey;
@@ -108,6 +110,11 @@ public class SaploClient implements Serializable {
 			return this;
 		}
 		
+		public Builder connect(boolean connect) {
+		    this.connect = connect;
+		    return this;
+		}
+		
 		/**
 		 * Build a SaploClient with the specified params
 		 * 
@@ -131,6 +138,7 @@ public class SaploClient implements Serializable {
 		secretKey = builder.secretKey;
 		ssl = builder.ssl;
 		endpoint = builder.endpoint;
+		connect = builder.connect;
 		
 		// create the managers
 		collectionMgr = new SaploCollectionManager(this);
@@ -142,7 +150,10 @@ public class SaploClient implements Serializable {
 		es = Executors.newFixedThreadPool(20);
 		
 		this.setupServerEnvironment();
-		createSession(builder.accessToken, builder.proxy, builder.httpParams);
+		
+		if(connect)
+		    createSession(builder.accessToken, builder.proxy, builder.httpParams);
+		
 		lock = new ReentrantLock();
 		sleeping = lock.newCondition();
 		
