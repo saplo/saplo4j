@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
-import com.saplo.api.client.entity.JSONRPCResponseObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
