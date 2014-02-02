@@ -347,20 +347,36 @@ public class SaploCollectionManager {
 		}));
 	}
 
-	/**
-	 * List all texts in the provided collection.
-	 *
-	 * @param collection The {@link SaploCollection} containing the texts.
-	 *
-	 * @return A list with the {@link SaploText}s in the collection.
-	 *
-	 * @throws SaploClientException
-	 */
-	public List<SaploText> listTexts(final SaploCollection collection) throws SaploClientException {
+    /**
+     * List all texts in the provided collection.
+     *
+     * @param collection The {@link SaploCollection} containing the texts.
+     * @param limit Maximum number of texts returned.
+     * @param maxTextId Return only texts with id less or equal to provided id.
+     * @param minTextId Return only texts with id higher or equal to provided id.
+     *
+     * @return A list with the {@link SaploText}s in the collection.
+     *
+     * @throws SaploClientException
+     */
+    public List<SaploText> listTexts(final SaploCollection collection, Integer limit, Long maxTextId, Long minTextId) throws SaploClientException {
 		JSONObject params = new JSONObject();
 
 		try {
 			params.put("collection_id", collection.getId());
+
+            if(limit != null) {
+                params.put("limit", limit);
+            }
+
+            if(maxTextId != null) {
+                params.put("max_text_id", maxTextId);
+            }
+
+            if(minTextId!= null) {
+                params.put("min_text_id", minTextId);
+            }
+
 		} catch(JSONException je) {
 			throw new SaploClientException(CODE_JSON_EXCEPTION, je);
 		}
@@ -382,6 +398,19 @@ public class SaploCollectionManager {
 		}
 	}
 
+    /**
+     * List all texts in the provided collection.
+     *
+     * @param collection The {@link SaploCollection} containing the texts.
+     *
+     * @return A list with the {@link SaploText}s in the collection.
+     *
+     * @throws SaploClientException
+     */
+    public List<SaploText> listTexts(final SaploCollection collection) throws SaploClientException {
+        return listTexts(collection, null, null, null);
+    }
+
 	/**
 	 * List all texts in the provided collection.
 	 *
@@ -392,11 +421,27 @@ public class SaploCollectionManager {
 	 * @throws SaploClientException
 	 */
 	public List<SaploText> listTexts(final int collectionId) throws SaploClientException {
-		SaploCollection collection = new SaploCollection();
-		collection.setId(collectionId);
-
-		return listTexts(collection);
+		return listTexts(collectionId, null, null, null);
 	}
+
+    /**
+     * List all texts in the provided collection.
+     *
+     * @param collectionId The ID of the {@link SaploCollection} containing the texts.
+     * @param limit Maximum number of texts returned.
+     * @param maxTextId Return only texts with id less or equal to provided id.
+     * @param minTextId Return only texts with id higher or equal to provided id.
+     *
+     * @return A list with the {@link SaploText}s in the collection.
+     *
+     * @throws SaploClientException
+     */
+    public List<SaploText> listTexts(final int collectionId, Integer limit, Long maxTextId, Long minTextId) throws SaploClientException {
+        SaploCollection collection = new SaploCollection();
+        collection.setId(collectionId);
+
+        return listTexts(collection, limit, maxTextId, minTextId);
+    }
 
 	/**
 	 * Asynchronously lists all texts in the provided collection.
@@ -415,6 +460,26 @@ public class SaploCollectionManager {
 		}));
 	}
 
+    /**
+     * Asynchronously lists all texts in the provided collection.
+     * For an example usage, see {@link #createAsync(SaploCollection)}
+     *
+     * @param collection The {@link SaploCollection} containing the texts.
+     * @param limit Maximum number of texts returned.
+     * @param maxTextId Return only texts with id less or equal to provided id.
+     * @param minTextId Return only texts with id higher or equal to provided id.
+     *
+     * @return A list with the {@link SaploText}s in the collection.
+     */
+    public SaploFuture<List<SaploText>> listTextsAsync(final SaploCollection collection, final Integer limit, final Long maxTextId, final Long minTextId) {
+        return new SaploFuture<List<SaploText>>(es.submit(new Callable<List<SaploText>>() {
+            @Override
+            public List<SaploText> call() throws Exception {
+                return listTexts(collection, limit, maxTextId, minTextId);
+            }
+        }));
+    }
+
 	/**
 	 * Asynchronously lists all texts in the provided collection.
 	 * For an example usage, see {@link #createAsync(SaploCollection)}
@@ -423,12 +488,24 @@ public class SaploCollectionManager {
 	 *
 	 * @return A list with the {@link SaploText}s in the collection.
 	 */
-	public SaploFuture<List<SaploText>> listTextsAsync(final int collectionId) {
+	public SaploFuture<List<SaploText>> listTextsAsync(final int collectionId, final Integer limit, final Long maxTextId, final Long minTextId) {
 		SaploCollection collection = new SaploCollection();
 		collection.setId(collectionId);
 
-		return listTextsAsync(collection);
+		return listTextsAsync(collection, limit, maxTextId, minTextId);
 	}
+
+    /**
+     * Asynchronously lists all texts in the provided collection.
+     * For an example usage, see {@link #createAsync(SaploCollection)}
+     *
+     * @param collectionId The ID of a {@link SaploCollection} containing the texts.
+     *
+     * @return A list with the {@link SaploText}s in the collection.
+     */
+    public SaploFuture<List<SaploText>> listTextsAsync(final int collectionId) {
+        return listTextsAsync(collectionId, null, null, null);
+    }
 
 	/**
 	 * Reset a given collection.
