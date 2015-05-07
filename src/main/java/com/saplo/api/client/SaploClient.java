@@ -139,16 +139,16 @@ public class SaploClient implements Serializable {
 		ssl = builder.ssl;
 		endpoint = builder.endpoint;
 		connect = builder.connect;
-		
+
+		es = Executors.newFixedThreadPool(20);
+
 		// create the managers
 		collectionMgr = new SaploCollectionManager(this);
 		textMgr = new SaploTextManager(this);
 		groupMgr = new SaploGroupManager(this);
 		authMgr = new SaploAuthManager(this);
 		accountMgr = new SaploAccountManager(this);
-		
-		es = Executors.newFixedThreadPool(20);
-		
+
 		this.setupServerEnvironment();
 		
 		if(connect)
