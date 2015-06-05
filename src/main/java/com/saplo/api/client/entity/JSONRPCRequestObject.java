@@ -125,8 +125,8 @@ public class JSONRPCRequestObject {
 	/**
 	 * toString() with indentation
 	 *  
-	 * @param indent
-	 * @return 
+	 * @param indent indent
+	 * @return string
 	 */
 	public String toString(int indent) {
 		try {

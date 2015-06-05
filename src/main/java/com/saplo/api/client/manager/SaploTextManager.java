@@ -55,7 +55,7 @@ public class SaploTextManager {
 	 * @param saploText - the text to be added, should contain a 
 	 * {@link SaploText#getCollection()} object of type {@link SaploCollection}
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void create(SaploText saploText) throws SaploClientException {
 
@@ -97,13 +97,13 @@ public class SaploTextManager {
 
 	/**
 	 * Asynchronously create text.
-	 * This method returns a {@link SaploFuture}<{@link Boolean}> object, 
+	 * This method returns a {@link SaploFuture}&lt;{@link Boolean}&gt; object,
 	 * which is <code>true</code> in case of success and <code>false</code> in case of failure.
 	 * 
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploText myText = new SaploText(myCollection, myTextBody);
-	 *	SaploFuture<Boolean> future = textMgr.createAsync(myText);
+	 *	SaploFuture&lt;Boolean&gt; future = textMgr.createAsync(myText);
 	 *
 	 *	// do some other stuff here
 	 *
@@ -129,8 +129,7 @@ public class SaploTextManager {
 	 * 
 	 * 
 	 * @param saploText - the {@link SaploText} to create
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> createAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -144,11 +143,11 @@ public class SaploTextManager {
 	/**
 	 * A convenient method for adding texts with only required parameters.
 	 * 
-	 * @param collectionId
-	 * @param bodyText
+	 * @param collectionId collectionId
+	 * @param bodyText bodyText
 	 * @return saploText
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploText create(int collectionId, String bodyText) throws SaploClientException {
 		SaploCollection col = new SaploCollection();
@@ -166,7 +165,7 @@ public class SaploTextManager {
 	 * 
 	 * @param saploText - a {@link SaploText} object with a mandatory id and collection parameters
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void get(SaploText saploText) throws SaploClientException {
 
@@ -198,8 +197,7 @@ public class SaploTextManager {
 	 * For an example usage, see {@link #createAsync(SaploText)}
 	 * 
 	 * @param saploText - a {@link SaploText} object with a mandatory id and collection parameters
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&gt;{@link Boolean}&lt; with success or fail
 	 */
 	public SaploFuture<Boolean> getAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -213,11 +211,11 @@ public class SaploTextManager {
 	/**
 	 * A convenient way of getting text with only the required parameters
 	 * 
-	 * @param collectionId
-	 * @param textId
+	 * @param collectionId collectionId
+	 * @param textId textId
 	 * @return saploText
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploText get(int collectionId, int textId) throws SaploClientException {
 		SaploCollection col = new SaploCollection();
@@ -237,7 +235,7 @@ public class SaploTextManager {
 	 * 
 	 * @param saploText - the {@link SaploText} to be updated
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void update(SaploText saploText) throws SaploClientException {
 
@@ -286,8 +284,7 @@ public class SaploTextManager {
 	 * For an example usage, see {@link #createAsync(SaploText)}
 	 * 
 	 * @param saploText - the {@link SaploText} to be updated
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> updateAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -305,7 +302,7 @@ public class SaploTextManager {
 	 * should have id and collection attributes
 	 * @return true if success
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public boolean delete(SaploText saploText) throws SaploClientException {
 
@@ -338,8 +335,7 @@ public class SaploTextManager {
 	 * For an example usage, see {@link #createAsync(SaploText)}
 	 * 
 	 * @param saploText - the {@link SaploText} to be deleted
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> deleteAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -351,11 +347,12 @@ public class SaploTextManager {
 
 	/** 
 	 * A convenient way of deleting SaploText by textId
-	 *  
-	 * @param textId
+	 *
+	 * @param collectionId collectionId
+	 * @param textId textId
 	 * @return success?
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public boolean delete(int collectionId, int textId) throws SaploClientException {
 
@@ -376,10 +373,10 @@ public class SaploTextManager {
 	 * 
 	 * @param saploText - the text to extract the {@link SaploTag}s from
 	 * @param wait - how long to wait for the API to return (seconds)
-	 * @param skipCategorization
+	 * @param skipCategorization skipCategorization
 	 * @return tagList - a {@link List} containing all the tags extracted
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public List<SaploTag> tags(SaploText saploText, int wait, boolean skipCategorization) throws SaploClientException {
 
@@ -429,9 +426,8 @@ public class SaploTextManager {
 	 * 
 	 * @param saploText - the text to extract the {@link SaploTag}s from
 	 * @param wait - how long to wait for the API to return (seconds)
-	 * @param skipCategorization
-	 * @return {@link SaploFuture}<{@link List}<{@link SaploTag}>> containing all the tags extracted
-	 * @throws SaploClientException
+	 * @param skipCategorization skipCategorization
+	 * @return {@link SaploFuture}&lt;{@link List}&lt;{@link SaploTag}&gt;&gt; containing all the tags extracted
 	 */
 	public SaploFuture<List<SaploTag>> tagsAsync(final SaploText saploText, final int wait, final boolean skipCategorization) {
 		return new SaploFuture<List<SaploTag>>( es.submit(new Callable<List<SaploTag>>() {
@@ -448,7 +444,7 @@ public class SaploTextManager {
 	 * @param saploText - the text to extract the {@link SaploTag}s from
 	 * @return tagList - a {@link List} containing all the tags extracted
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public List<SaploTag> tags(SaploText saploText) throws SaploClientException {
 		return tags(saploText, ClientUtil.NULL_INT, false);
@@ -460,11 +456,11 @@ public class SaploTextManager {
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploText myText = new SaploText(myCollection, myTextBody);
-	 *	SaploFuture<List<SaploTag>> future = textMgr.tagsAsync(myText;
+	 *	SaploFuture&lt;List&lt;SaploTag&gt;&gt; future = textMgr.tagsAsync(myText;
 	 *
 	 *	// do some other stuff here
 	 *
-	 *	List<SaploTag> tags;
+	 *	List&lt;SaploTag&gt; tags;
 	 *	try {
 	 *		tags = future.get(3, TimeUnit.SECONDS);
 	 *
@@ -481,8 +477,8 @@ public class SaploTextManager {
 	 *
 	 * </pre>
 	 * 
-	 * @param text - the text to extract the {@link SaploTag}s from
-	 * @return {@link SaploFuture}<{@link List}<{@link SaploTag}>> containing all the tags extracted
+	 * @param saploText - the text to extract the {@link SaploTag}s from
+	 * @return {@link SaploFuture}&lt;{@link List}&lt;{@link SaploTag}&gt;&gt; containing all the tags extracted
 	 */
 	public SaploFuture<List<SaploTag>> tagsAsync(final SaploText saploText) {
 		return new SaploFuture<List<SaploTag>>( es.submit(new Callable<List<SaploTag>>() {
@@ -495,11 +491,11 @@ public class SaploTextManager {
 	/**
 	 * Retrieve tags by just providing collectionId and textId.
 	 * 
-	 * @param collectionId
-	 * @param textId
+	 * @param collectionId collectionId
+	 * @param textId textId
 	 * @return list
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public List<SaploTag> tags(int collectionId, int textId) throws SaploClientException {
 		SaploCollection col = new SaploCollection();
@@ -517,8 +513,7 @@ public class SaploTextManager {
 	 *  
 	 * @param saploText - the {@link SaploText} to compare to
 	 * @param relatedBy - How the texts should be related.
-	 * {@link RelatedBy#context} - search for texts based on the same semantic meaning.
-	 * {@link RelatedBy#statistic} - search for texts based on statistical relations. 
+	 * {@link RelatedBy#statistic} - search for texts based on statistical relations.
 	 * E.g. number of words, similar words, common words etc. 
 	 * @param collectionScope - Search the given collections to find related texts.
 	 * @param wait - maximum time to wait for the result to be calculated.
@@ -526,9 +521,8 @@ public class SaploTextManager {
 	 * There is no guarantee that the number of results will be equal the limit. Max 50.
 	 * @param minThreshold - the minimum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param maxThreshold - the maximum similarity threshold, between 0 and 1 (1 = 100% similar)
-	 * @return relatedTextsList - a {@link List} containing related texts to the given text
-	 * 
-	 * @throws SaploClientException 
+	 *
+	 * @throws SaploClientException error
 	 */
 	public void relatedTexts(SaploText saploText, RelatedBy relatedBy, 
 			SaploCollection[] collectionScope, int wait, int limit, 
@@ -600,7 +594,7 @@ public class SaploTextManager {
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploText myText = new SaploText(myCollection, myTextBody);
-	 *	SaploFuture<Boolean> future = textMgr.relatedTextsAsync(myText, relatedBy, colScope, 10, 10, 0, 1);
+	 *	SaploFuture&lt;Boolean&gt; future = textMgr.relatedTextsAsync(myText, relatedBy, colScope, 10, 10, 0, 1);
 	 *
 	 *	// do some other stuff here
 	 *
@@ -617,7 +611,7 @@ public class SaploTextManager {
 	 *	}
 	 *
 	 *	if(createOk) {
-	 *		List<SaploText> relatedTexts = myText.getRelatedTexts();
+	 *		List&lt;SaploText&gt; relatedTexts = myText.getRelatedTexts();
 	 *
 	 *		// do some other operations as you prefer
 	 *	} else {
@@ -627,8 +621,7 @@ public class SaploTextManager {
 	 * 
 	 * @param saploText - the {@link SaploText} to compare to
 	 * @param relatedBy - How the texts should be related.
-	 * {@link RelatedBy#context} - search for texts based on the same semantic meaning.
-	 * {@link RelatedBy#statistic} - search for texts based on statistical relations. 
+	 * {@link RelatedBy#statistic} - search for texts based on statistical relations.
 	 * E.g. number of words, similar words, common words etc. 
 	 * @param collectionScope - Search the given collections to find related texts.
 	 * @param wait - maximum time to wait for the result to be calculated.
@@ -636,8 +629,7 @@ public class SaploTextManager {
 	 * There is no guarantee that the number of results will be equal the limit. Max 50.
 	 * @param minThreshold - the minimum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param maxThreshold - the maximum similarity threshold, between 0 and 1 (1 = 100% similar)
-	 * @return SaploFuture<relatedTextsList> - a {@link List} containing related texts to the given text
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedTextsList&gt; - a {@link List} containing related texts to the given text
 	 */
 	public SaploFuture<Boolean> relatedTextsAsync(final SaploText saploText, final RelatedBy relatedBy, 
 			final SaploCollection[] collectionScope, final int wait, final int limit, 
@@ -655,9 +647,8 @@ public class SaploTextManager {
 	 * with default values
 	 * 
 	 * @param saploText - the {@link SaploText} object to compare to
-	 * @return relatedTextsList - a {@link List} containing related texts to the given text
-	 * 
-	 * @throws SaploClientException 
+	 *
+	 * @throws SaploClientException error
 	 */
 	public void relatedTexts(SaploText saploText) throws SaploClientException {
 		relatedTexts(saploText, null, null, -1, -1, -1, -1);
@@ -666,12 +657,10 @@ public class SaploTextManager {
 	/**
 	 * Asynchronously search a collection/collections for related texts to a given 
 	 * text with default values. <br>
-	 * For an example usage, see {@link #relatedTextsAsync(SaploText, 
-	 * RelatedBy, SaploCollection[], int, int, double, double)}
+	 * For an example usage, see {@link #relatedTextsAsync(SaploText, RelatedBy, SaploCollection[], int, int, double, double)}
 	 * 
 	 * @param saploText - the {@link SaploText} to compare to
-	 * @return SaploFuture<relatedTextsList> - a {@link List} containing related texts to the given text
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedTextsList&gt; - a {@link List} containing related texts to the given text
 	 */
 	public SaploFuture<Boolean> relatedTextsAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>( es.submit(new Callable<Boolean>() {
@@ -691,9 +680,8 @@ public class SaploTextManager {
 	 * @param minThreshold - the minimum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param maxThreshold - the maximum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param limit - set max number of results.
-	 * @return relatedGroupsList - a {@link List} containing related texts to the given group(s)
-	 * 
-	 * @throws SaploClientException 
+	 *
+	 * @throws SaploClientException error
 	 */
 	public void relatedGroups(SaploText saploText, 
 			SaploGroup[] groupScope, int wait, double minThreshold, 
@@ -766,8 +754,7 @@ public class SaploTextManager {
 	 * @param minThreshold - the minimum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param maxThreshold - the maximum similarity threshold, between 0 and 1 (1 = 100% similar)
 	 * @param limit - set max number of results.
-	 * @return SaploFuture<relatedGroupsList> - a {@link List} containing related texts to the given group(s)
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedGroupsList&gt; - a {@link List} containing related texts to the given group(s)
 	 */
 	public SaploFuture<Boolean> relatedGroupsAsync(final SaploText saploText, 
 			final SaploGroup[] groupScope, final int wait, final double minThreshold, 
@@ -784,9 +771,8 @@ public class SaploTextManager {
 	 * Search for groups that are related to a given text, with default values.
 	 * 
 	 * @param saploText - the {@link SaploText} object to compare to
-	 * @return relatedGroupsList - a {@link List} containing related texts to the given group(s)
-	 * 
-	 * @throws SaploClientException 
+	 *
+	 * @throws SaploClientException error
 	 */
 	public void relatedGroups(SaploText saploText) throws SaploClientException {
 		relatedGroups(saploText, null, -1, -1, -1, -1);
@@ -795,12 +781,10 @@ public class SaploTextManager {
 	/**
 	 * Asynchronously search for groups that are related to a given text.
 	 * <br>
-	 * For an example usage, see {@link #relatedTextsAsync(SaploText, 
-	 * RelatedBy, SaploCollection[], int, int, double, double)}
+	 * For an example usage, see {@link #relatedTextsAsync(SaploText, RelatedBy, SaploCollection[], int, int, double, double)}
 	 *  
 	 * @param saploText - the {@link SaploText} object to compare to
-	 * @return SaploFuture<relatedGroupsList> - a {@link List} containing related texts to the given group(s)
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedGroupsList&gt; - a {@link List} containing related texts to the given group(s)
 	 */
 	public SaploFuture<Boolean> relatedGroupsAsync(final SaploText saploText) {
 		return new SaploFuture<Boolean>( es.submit(new Callable<Boolean>() {
@@ -814,11 +798,11 @@ public class SaploTextManager {
 	/**
 	 * Give feedback by adding a tag to a text.
 	 * 
-	 * @param saploText
-	 * @param saploTag
+	 * @param saploText saploText
+	 * @param saploTag saploTag
 	 * @return tag - newly added tag returned by the API
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploTag addTag(SaploText saploText, SaploTag saploTag) throws SaploClientException {
 		verifyCollection(saploText);
@@ -854,9 +838,9 @@ public class SaploTextManager {
 	/**
 	 * Create a new text for a given collection id with a given text_id
 	 * 
-	 * @param collectionId
-	 * @param textId
-	 * @return
+	 * @param collectionId collectionId
+	 * @param textId textId
+	 * @return SaploText
 	 */
 	public static SaploText getTextObject(int collectionId, int textId) {
 		SaploCollection col = new SaploCollection();

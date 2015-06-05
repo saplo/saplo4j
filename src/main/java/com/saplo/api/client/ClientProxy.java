@@ -15,22 +15,12 @@ public class ClientProxy {
 	private String password;
 	private boolean secure;
 	
-	/**
-	 * @param host
-	 * @param port
-	 */
 	public ClientProxy(String host, int port) {
 		this.host = host;
 		this.port = port;
 		this.secure = false;
 	}
 	
-	/**
-	 * @param host
-	 * @param port
-	 * @param username
-	 * @param password
-	 */
 	public ClientProxy(String host, int port, String username, String password) {
 		this.host = host;
 		this.port = port;

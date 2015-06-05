@@ -118,7 +118,7 @@ public class SaploClient implements Serializable {
 		 * Build a SaploClient with the specified params
 		 * 
 		 * @return SaploClient
-		 * @throws SaploClientException
+		 * @throws SaploClientException error
 		 */
 		public SaploClient build() throws SaploClientException {
 			if(this.endpoint == null || !this.endpoint.startsWith("http"))
@@ -296,7 +296,7 @@ public class SaploClient implements Serializable {
 	 * Check to see if the endpoint is actually a Saplo-API endpoint
 	 * 
 	 * @return up / notUp
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public boolean isUp() throws SaploClientException {
 
@@ -316,7 +316,7 @@ public class SaploClient implements Serializable {
 	 * Shut down the session
 	 * 
 	 * @return success / fail
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public boolean shutdown() throws SaploClientException {
 
@@ -353,10 +353,11 @@ public class SaploClient implements Serializable {
 
 	/**
 	 * Send message to server and receive response.
-	 * 
+	 *
+	 * @param request request
 	 * @return JSONRPCResponseObject with response params.
-	 * 
-	 * @throws SaploClientException 
+	 *
+	 * @throws SaploClientException error
 	 */
 	public JSONRPCResponseObject sendAndReceive(JSONRPCRequestObject request) throws SaploClientException {
 		logger.debug(">>>>>>Sending request: " + request);
@@ -367,9 +368,8 @@ public class SaploClient implements Serializable {
 	
 	/**
 	 * An Async version of {@link #sendAndReceive(JSONRPCRequestObject)}
-	 * 
-	 * @param request
-	 * @return
+	 * @param request request
+	 * @return future response
 	 */
 	public SaploFuture<JSONRPCResponseObject> sendAndReceiveAsync(final JSONRPCRequestObject request) {
 		return new SaploFuture<JSONRPCResponseObject>(es.submit(new Callable<JSONRPCResponseObject>() {
@@ -421,7 +421,7 @@ public class SaploClient implements Serializable {
 	 * @param responseMessage - a JSONRPCResponseObject received from the server (API)
 	 * @return object - a raw object encapsulated in the "result" JSON parameter of the response
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public Object parseResponse(JSONRPCResponseObject responseMessage)
 			throws SaploClientException {

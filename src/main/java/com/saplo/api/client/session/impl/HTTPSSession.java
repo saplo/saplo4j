@@ -62,6 +62,7 @@ public class HTTPSSession extends HTTPSessionApache {
 	
 	/**
 	 * Register this transport in 'registry'
+	 * @param registry registry
 	 */
 	public static void register(TransportRegistry registry) {
 		registry.registerTransport("https", new SessionFactoryImpl());
@@ -69,6 +70,7 @@ public class HTTPSSession extends HTTPSessionApache {
 
 	/**
 	 * De-register this transport from the 'registry'
+	 * @param registry registry
 	 */
 	public static void deregister(TransportRegistry registry) {
 		registry.deregisterTransport("https");

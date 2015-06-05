@@ -28,12 +28,6 @@ public class SaploFuture<V> {
 		this.future = future;
 	}
 	
-	/**
-	 * @see Future#get()
-	 * 
-	 * @return
-	 * @throws SaploClientException - converts the {@link Future#get()} exceptions into a SaploClientException
-	 */
 	public V get() throws SaploClientException {
 		try {
 			return future.get();
@@ -47,14 +41,6 @@ public class SaploFuture<V> {
 		}
 	}
 	
-	/**
-	 * @see Future#get(long, TimeUnit)
-	 * 
-	 * @param timeout
-	 * @param unit
-	 * @return
-	 * @throws SaploClientException - converts the {@link Future#get(long, TimeUnit)} exceptions into a SaploClientException
-	 */
 	public V get(long timeout, TimeUnit unit) throws SaploClientException {
 		try {
 			return future.get(timeout, unit);
@@ -70,26 +56,14 @@ public class SaploFuture<V> {
 		}
 	}
 	
-	/**
-	 * @see Future#cancel(boolean)
-	 * @param mayInterruptIfRunning
-	 */
 	public void cancel(boolean mayInterruptIfRunning) {
 		future.cancel(mayInterruptIfRunning);
 	}
 	
-	/**
-	 * @see Future#isCancelled()
-	 * @return
-	 */
 	public boolean isCancelled() {
 		return future.isCancelled();
 	}
 
-	/**
-	 * @see Future#isDone()
-	 * @return
-	 */
 	public boolean isDone() {
 		return future.isDone();
 	}

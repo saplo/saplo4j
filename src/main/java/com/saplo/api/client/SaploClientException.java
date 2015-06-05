@@ -94,9 +94,6 @@ public class SaploClientException extends Exception {
 		return errorCode;
 	}
 
-	/**
-	 * {@see super#getCause()}
-	 */
 	public Throwable getCause() {
 		return this.cause;
 	}

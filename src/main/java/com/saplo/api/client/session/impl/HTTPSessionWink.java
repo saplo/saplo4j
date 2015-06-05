@@ -94,7 +94,7 @@ public class HTTPSessionWink implements Session {
 	/**
 	 * Set a proxy of type ClientProxy to use for this transport connections
 	 * 
-	 * @param proxy
+	 * @param clientProxy proxy
 	 */
 	public void setProxy(ClientProxy clientProxy) {
 		this.clientProxy = clientProxy;
@@ -129,6 +129,7 @@ public class HTTPSessionWink implements Session {
 
 	/**
 	 * Register this transport in 'registry'
+	 * @param registry registry
 	 */
 	public static void register(TransportRegistry registry) {
 		registry.registerTransport("http", new SessionFactoryImpl());
@@ -136,6 +137,7 @@ public class HTTPSessionWink implements Session {
 
 	/**
 	 * De-register this transport from the 'registry'
+	 * @param registry registry
 	 */
 	public static void deregister(TransportRegistry registry) {
 		registry.deregisterTransport("http");

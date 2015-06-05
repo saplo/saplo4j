@@ -120,7 +120,7 @@ public class HTTPSessionApache implements Session {
 	 * 
 	 * @param message - a message to send
 	 * @return response object got back from the API
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public JSONRPCResponseObject sendAndReceive(JSONRPCRequestObject message)
 			throws SaploClientException {
@@ -217,6 +217,7 @@ public class HTTPSessionApache implements Session {
 
 	/**
 	 * Register this transport in 'registry'
+	 * @param registry registry
 	 */
 	public static void register(TransportRegistry registry) {
 		registry.registerTransport("http", new SessionFactoryImpl());
@@ -224,6 +225,7 @@ public class HTTPSessionApache implements Session {
 
 	/**
 	 * De-register this transport from the 'registry'
+	 * @param registry registry
 	 */
 	public static void deregister(TransportRegistry registry) {
 		registry.deregisterTransport("http");

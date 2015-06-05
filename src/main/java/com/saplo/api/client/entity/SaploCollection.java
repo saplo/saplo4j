@@ -37,7 +37,7 @@ public class SaploCollection {
 	/**
 	 * A constructor with the collection Id
 	 * 
-	 * @param id
+	 * @param id id
 	 */
 	public SaploCollection(int id) {
 		this.id = id;
@@ -46,8 +46,8 @@ public class SaploCollection {
 	/**
 	 * A constructor with required parameters
 	 * 
-	 * @param collectionName
-	 * @param lang
+	 * @param collectionName collectionName
+	 * @param lang lang
 	 */
 	public SaploCollection(String collectionName, Language lang) {
 		this.name = collectionName;

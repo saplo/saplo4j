@@ -48,7 +48,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the new {@link SaploCollection} object
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void create(SaploCollection saploCollection) throws SaploClientException {
 
@@ -78,13 +78,13 @@ public class SaploCollectionManager {
 
 	/**
 	 * Asynchronously create a new collection to store texts in.
-	 * This method returns a {@link SaploFuture}<{@link Boolean}> object,
+	 * This method returns a {@link SaploFuture}&lt;{@link Boolean}&gt; object,
 	 * which is <code>true</code> in case of success and <code>false</code> in case of failure.
 	 *
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploCollection myCollection = new SaploCollection("test col", Language.en);
-	 *	Future<Boolean> future = collectionMgr.createAsync(myCollection);
+	 *	Future&lt;Boolean&gt; future = collectionMgr.createAsync(myCollection);
 	 *
 	 *	// do some other stuff here
 	 *
@@ -111,7 +111,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} to create
 	 *
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> createAsync(final SaploCollection saploCollection) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -127,7 +127,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection the {@link SaploCollection} object with just an id.
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void get(SaploCollection saploCollection) throws SaploClientException {
 
@@ -155,9 +155,8 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection the {@link SaploCollection} object with just an id.
 	 *
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 *
-	 * @throws SaploClientException
 	 */
 	public SaploFuture<Boolean> getAsync(final SaploCollection saploCollection) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -171,11 +170,11 @@ public class SaploCollectionManager {
 	/**
 	 * A convenient way of getting SaploCollections with only the required parameters
 	 *
-	 * @param collectionId
+	 * @param collectionId collectionId
 	 *
 	 * @return saploCollection
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploCollection get(int collectionId) throws SaploClientException {
 		SaploCollection col = new SaploCollection();
@@ -191,7 +190,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} object to update
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void update(SaploCollection saploCollection) throws SaploClientException {
 
@@ -223,9 +222,8 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} object to be updated
 	 *
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 *
-	 * @throws SaploClientException
 	 */
 	public SaploFuture<Boolean> updateAsync(final SaploCollection saploCollection) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -241,7 +239,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} object to be deleted
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void delete(SaploCollection saploCollection) throws SaploClientException {
 
@@ -269,9 +267,8 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} object to be deleted
 	 *
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 *
-	 * @throws SaploClientException
 	 */
 	public SaploFuture<Boolean> deleteAsync(final SaploCollection saploCollection) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -285,11 +282,11 @@ public class SaploCollectionManager {
 	/**
 	 * A convenient way of deleting SaploCollections with only the required parameters
 	 *
-	 * @param collectionId
+	 * @param collectionId collectionId
 	 *
 	 * @return saploCollection - the deleted SaploCollection
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploCollection delete(int collectionId) throws SaploClientException {
 		SaploCollection col = new SaploCollection();
@@ -305,7 +302,7 @@ public class SaploCollectionManager {
 	 *
 	 * @return collectionList - a {@link List} containing all the user {@link SaploCollection}s
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public List<SaploCollection> list() throws SaploClientException {
 		JSONObject params = new JSONObject();
@@ -335,7 +332,7 @@ public class SaploCollectionManager {
 	 * Asynchronously list all collections the current user has access to.
 	 * For an example usage, see {@link #createAsync(SaploCollection)}
 	 *
-	 * @return {@link SaploFuture}<{@link List}<{@link SaploCollection}>> containing all the user {@link SaploCollection}s
+	 * @return {@link SaploFuture}&lt;{@link List}&lt;{@link SaploCollection}&gt;&gt; containing all the user {@link SaploCollection}s
 	 */
 	public SaploFuture<List<SaploCollection>> listAsync() {
 		return new SaploFuture<List<SaploCollection>>(es.submit(new Callable<List<SaploCollection>>() {
@@ -357,7 +354,7 @@ public class SaploCollectionManager {
      *
      * @return A list with the {@link SaploText}s in the collection.
      *
-     * @throws SaploClientException
+     * @throws SaploClientException error
      */
     public List<SaploText> listTexts(final SaploCollection collection, Integer limit, Long maxTextId, Long minTextId) throws SaploClientException {
 		JSONObject params = new JSONObject();
@@ -405,7 +402,7 @@ public class SaploCollectionManager {
      *
      * @return A list with the {@link SaploText}s in the collection.
      *
-     * @throws SaploClientException
+     * @throws SaploClientException error
      */
     public List<SaploText> listTexts(final SaploCollection collection) throws SaploClientException {
         return listTexts(collection, null, null, null);
@@ -418,7 +415,7 @@ public class SaploCollectionManager {
 	 *
 	 * @return A list with the {@link SaploText}s in the collection.
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public List<SaploText> listTexts(final int collectionId) throws SaploClientException {
 		return listTexts(collectionId, null, null, null);
@@ -434,7 +431,7 @@ public class SaploCollectionManager {
      *
      * @return A list with the {@link SaploText}s in the collection.
      *
-     * @throws SaploClientException
+     * @throws SaploClientException error
      */
     public List<SaploText> listTexts(final int collectionId, Integer limit, Long maxTextId, Long minTextId) throws SaploClientException {
         SaploCollection collection = new SaploCollection();
@@ -485,6 +482,9 @@ public class SaploCollectionManager {
 	 * For an example usage, see {@link #createAsync(SaploCollection)}
 	 *
 	 * @param collectionId The ID of a {@link SaploCollection} containing the texts.
+	 * @param limit limit
+	 * @param maxTextId maxTextId
+	 * @param minTextId minTextId
 	 *
 	 * @return A list with the {@link SaploText}s in the collection.
 	 */
@@ -514,7 +514,7 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} to be reset
 	 *
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void reset(SaploCollection saploCollection) throws SaploClientException {
 
@@ -542,9 +542,8 @@ public class SaploCollectionManager {
 	 *
 	 * @param saploCollection - the {@link SaploCollection} object to be reset
 	 *
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 *
-	 * @throws SaploClientException
 	 */
 	public SaploFuture<Boolean> resetAsync(final SaploCollection saploCollection) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {

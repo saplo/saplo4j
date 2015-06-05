@@ -15,18 +15,20 @@ public interface Session {
 	 * 
 	 * @param message - A JSON message to send
 	 * @return the JSON result message
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	JSONRPCResponseObject sendAndReceive(JSONRPCRequestObject message) throws SaploClientException;
 
 	/**
 	 * Set a params value to the session (usually the jsessionid 
 	 * or access_token param)
+	 * @param params params
 	 */
 	void setParams(String params);
 
 	/**
 	 * Close the session and release the resources if necessary
+	 * @throws IOException error
 	 */
 	void close() throws IOException;
 }

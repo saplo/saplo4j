@@ -31,7 +31,7 @@ public class SaploAccountManager {
 	 * 
 	 * @return SaploAccount
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public SaploAccount get() throws SaploClientException {
 		JSONObject params = new JSONObject();
@@ -66,7 +66,7 @@ public class SaploAccountManager {
 	 *  
 	 * @return methods
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public List<String> listMethods() throws SaploClientException {
 		JSONObject params = new JSONObject();

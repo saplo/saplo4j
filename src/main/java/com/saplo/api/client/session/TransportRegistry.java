@@ -76,9 +76,11 @@ public class TransportRegistry {
 		/**
 		 * @param uri - URI used to open this session
 		 * @param params - jsessionid or access_token param
-		 * @param httpParams
+		 * @param proxy clientProxy
+		 * @param requestConfig requestConfig
+		 * @return session
 		 */
-		Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig httpParams);
+		Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig requestConfig);
 	}
 
 }

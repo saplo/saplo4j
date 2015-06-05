@@ -50,7 +50,7 @@ public class SaploGroupManager {
 	 * 
 	 * @param saploGroup - the new {@link SaploGroup} object to be created
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void create(SaploGroup saploGroup) throws SaploClientException {
 		
@@ -78,13 +78,13 @@ public class SaploGroupManager {
 
 	/**
 	 * Asynchronously create a new text group on the API server.
-	 * This method returns a {@link SaploFuture}<{@link Boolean}> object, 
+	 * This method returns a {@link SaploFuture}&lt;{@link Boolean}&gt; object,
 	 * which is <code>true</code> in case of success and <code>false</code> in case of failure.
 	 * 
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploGroup myGroup = new SaploGroup("my example group", Language.en);
-	 *	Future<Boolean> future = groupMgr.createAsync(myGroup);
+	 *	Future&lt;Boolean&gt; future = groupMgr.createAsync(myGroup);
 	 *
 	 *	// do some other stuff here
 	 *
@@ -112,8 +112,7 @@ public class SaploGroupManager {
 	 * 
 	 * 
 	 * @param saploGroup - the new {@link SaploGroup} object to be created
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> createAsync(final SaploGroup saploGroup) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -129,7 +128,7 @@ public class SaploGroupManager {
 	 * 
 	 * @param saploGroup - the {@link SaploGroup} to update
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void update(SaploGroup saploGroup) throws SaploClientException {
 		verifyId(saploGroup);
@@ -159,8 +158,7 @@ public class SaploGroupManager {
 	 * For an example usage, see {@link #createAsync(SaploGroup)}
 	 * 
 	 * @param saploGroup - the {@link SaploGroup} to update
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> updateAsync(final SaploGroup saploGroup) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -176,7 +174,7 @@ public class SaploGroupManager {
 	 * WARNING: This will remove all texts linked to that group and remove all results for the group
 	 * 
 	 * @param saploGroup - the group to reset
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public void reset(SaploGroup saploGroup) throws SaploClientException {
 		verifyId(saploGroup);
@@ -203,7 +201,7 @@ public class SaploGroupManager {
 	 * For an example usage on async, see {@link #createAsync(SaploGroup)}
 	 * 
 	 * @param saploGroup - the {@link SaploGroup} to reset
-	 * @throws SaploClientException
+	 * @return Future boolean
 	 */
 	public SaploFuture<Boolean> resetAsync(final SaploGroup saploGroup) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -221,7 +219,7 @@ public class SaploGroupManager {
 	 * @param saploGroup - the group to delete
 	 * @return success/fail
 	 * 
-	 * @throws SaploClientException
+	 * @throws SaploClientException error
 	 */
 	public boolean delete(SaploGroup saploGroup) throws SaploClientException {
 		verifyId(saploGroup);
@@ -248,8 +246,7 @@ public class SaploGroupManager {
 	 * 
 	 * @param saploGroup - the {@link SaploGroup} to delete
 	 * @return success/fail
-	 * @throws SaploClientException
-	 */	
+	 */
 	public SaploFuture<Boolean> deleteAsync(final SaploGroup saploGroup) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
 			public Boolean call() throws SaploClientException {
@@ -263,7 +260,7 @@ public class SaploGroupManager {
 	 * 
 	 * @return a {@link List} containing all the users {@link SaploGroup}s.
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public List<SaploGroup> list() throws SaploClientException {
 		List<SaploGroup> groupList = new ArrayList<SaploGroup>();
@@ -292,8 +289,7 @@ public class SaploGroupManager {
 	 * Asynchronously list all the groups that belong to the user.
 	 * For an example usage, see {@link #createAsync(SaploGroup)}
 	 * 
-	 * @return {@link SaploFuture}<{@link List}<{@link SaploGroup}>> containing all the user {@link SaploGroup}s
-	 * @throws
+	 * @return {@link SaploFuture}&lt;{@link List}&lt;{@link SaploGroup}&gt;&gt; containing all the user {@link SaploGroup}s
 	 */
 	public SaploFuture<List<SaploGroup>> listAsync() {
 		return new SaploFuture<List<SaploGroup>>(es.submit(new Callable<List<SaploGroup>>() {
@@ -310,7 +306,7 @@ public class SaploGroupManager {
 	 * @return textList - a {@link List} populated with {@link SaploText} objects 
 	 * (only {@link SaploCollection#getId()} and {@link SaploText#getId()} params)
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public List<SaploText> listTexts(SaploGroup saploGroup) throws SaploClientException {
 		List<SaploText> textList = new ArrayList<SaploText>();
@@ -348,10 +344,9 @@ public class SaploGroupManager {
 	 * Asynchronously get a list of all texts ({@link SaploText}) that exist in a group.
 	 * For an example usage, see {@link #createAsync(SaploGroup)}
 	 * 
-	 * @param group - The group whose text list we want. {@link SaploGroup#getId()} is mandatory.
-	 * @return {@link SaploFuture}<{@link List}<{@link SaploText}>> populated with {@link SaploText} objects 
+	 * @param saploGroup - The group whose text list we want. {@link SaploGroup#getId()} is mandatory.
+	 * @return {@link SaploFuture}&lt;{@link List}&lt;{@link SaploText}&gt;&gt; populated with {@link SaploText} objects
 	 * (only {@link SaploCollection#getId()} and {@link SaploText#getId()} params)
-	 * @throws
 	 */
 	public SaploFuture<List<SaploText>> listTextsAsync(final SaploGroup saploGroup) {
 		return new SaploFuture<List<SaploText>>(es.submit(new Callable<List<SaploText>>() {
@@ -368,7 +363,7 @@ public class SaploGroupManager {
 	 * @param saploText - the {@link SaploText} to add
 	 * @return true - on success
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public boolean addText(SaploGroup saploGroup, SaploText saploText) throws SaploClientException {
 		verifyId(saploGroup);
@@ -399,8 +394,7 @@ public class SaploGroupManager {
 	 * 
 	 * @param saploGroup - which {@link SaploGroup} to add the text to
 	 * @param saploText - the {@link SaploText} to add
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> addTextAsync(final SaploGroup saploGroup, final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -418,7 +412,7 @@ public class SaploGroupManager {
 	 * @param saploText - the {@link SaploText} to delete
 	 * @return true - on success
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public boolean deleteText(SaploGroup saploGroup, SaploText saploText) throws SaploClientException {
 		verifyId(saploGroup);
@@ -449,8 +443,7 @@ public class SaploGroupManager {
 	 * 
 	 * @param saploGroup - which {@link SaploGroup} to delete text from
 	 * @param saploText - the {@link SaploText} to delete
-	 * @return a {@link SaploFuture}<{@link Boolean}> with success or fail
-	 * @throws SaploClientException
+	 * @return a {@link SaploFuture}&lt;{@link Boolean}&gt; with success or fail
 	 */
 	public SaploFuture<Boolean> deleteTextAsync(final SaploGroup saploGroup, final SaploText saploText) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -470,7 +463,7 @@ public class SaploGroupManager {
 	 * By default, all the user groups are searched.
 	 * @param wait - maximum time to wait for the result to be calculated.
 	 * 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void relatedGroups(SaploGroup saploGroup, SaploGroup[] groupScope, int wait) throws SaploClientException {
 		verifyId(saploGroup);
@@ -521,7 +514,7 @@ public class SaploGroupManager {
 	 * Here is an example usage:
 	 * <pre>
 	 *	SaploGroup myGroup = new SaploGroup("my example group", Language.en);
-	 *	SaploFuture<Boolean> future = groupMgr.relatedGroupsAsync(myGroup, relatedBy, groupScope, 10);
+	 *	SaploFuture&lt;Boolean&gt; future = groupMgr.relatedGroupsAsync(myGroup, relatedBy, groupScope, 10);
 	 *
 	 *	// do some other stuff here
 	 *
@@ -538,7 +531,7 @@ public class SaploGroupManager {
 	 *	}
 	 *
 	 *	if(processOk) {
-	 *		List<SaploGroup> relatedGroups = myGroup.getRelatedGroups();
+	 *		List&lt;SaploGroup&gt; relatedGroups = myGroup.getRelatedGroups();
 	 *
 	 *		// do some other operations as you prefer
 	 *
@@ -551,8 +544,7 @@ public class SaploGroupManager {
 	 * @param groupScope - the {@link SaploGroup}s the given group should be compared to.
 	 * By default, all the user groups are searched.
 	 * @param wait - maximum time to wait for the result to be calculated.
-	 * @return SaploFuture<relatedGroupsList> - a {@link List} containing related groups to the given group
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedGroupsList&gt; - a {@link List} containing related groups to the given group
 	 */
 	public SaploFuture<Boolean> relatedGroupsAsync(final SaploGroup saploGroup, final SaploGroup[] groupScope, final int wait) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
@@ -571,7 +563,7 @@ public class SaploGroupManager {
 	 * @param collection - Search the given collections to find related texts.
 	 * @param wait - maximum time to wait for the result to be calculated.
 	 * @param limit - the maximum number of related texts in the result. 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void relatedTexts(SaploGroup saploGroup, SaploCollection collection, int wait, int limit) throws SaploClientException {
 		verifyId(saploGroup);
@@ -626,7 +618,7 @@ public class SaploGroupManager {
 	 * @param collectionScope - Search the given collections to find related texts.
 	 * @param wait - maximum time to wait for the result to be calculated.
 	 * @param limit - the maximum number of related texts in the result. 
-	 * @throws SaploClientException 
+	 * @throws SaploClientException error
 	 */
 	public void relatedTexts(SaploGroup saploGroup, SaploCollection[] collectionScope, int wait, int limit) 
 	throws SaploClientException {
@@ -645,8 +637,7 @@ public class SaploGroupManager {
 	 * @param collection - Search the given collections to find related texts.
 	 * @param wait - maximum time to wait for the result to be calculated.
 	 * @param limit - the maximum number of related texts in the result. 
-	 * @return SaploFuture<relatedTextsList> - a {@link List} containing related texts to the given group
-	 * @throws SaploClientException
+	 * @return SaploFuture&lt;relatedTextsListg&gt; - a {@link List} containing related texts to the given group
 	 */
 	public SaploFuture<Boolean> relatedTextsAsync(final SaploGroup saploGroup, final SaploCollection collection, final int wait, final int limit) {
 		return new SaploFuture<Boolean>(es.submit(new Callable<Boolean>() {
