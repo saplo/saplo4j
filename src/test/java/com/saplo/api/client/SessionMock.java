@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 
-import org.apache.commons.httpclient.HttpException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -17,7 +16,6 @@ import com.saplo.api.client.entity.JSONRPCRequestObject;
 import com.saplo.api.client.entity.JSONRPCResponseObject;
 import com.saplo.api.client.manager.SaploAccountManager;
 import com.saplo.api.client.manager.SaploAuthManager;
-//import static org.mockito.Mockito.when;
 
 /**
  * @author progre55
@@ -26,7 +24,7 @@ import com.saplo.api.client.manager.SaploAuthManager;
 public class SessionMock {
 
 	@Test
-	public void someFirstTest() throws JSONException, HttpException, IOException, SaploClientException {
+	public void someFirstTest() throws JSONException, IOException, SaploClientException {
 		
 		SaploClient client = mock(SaploClient.class);
 		
