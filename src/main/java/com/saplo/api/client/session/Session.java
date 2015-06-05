@@ -1,6 +1,7 @@
 package com.saplo.api.client.session;
 
-import com.saplo.api.client.ClientProxy;
+import java.io.IOException;
+
 import com.saplo.api.client.SaploClientException;
 import com.saplo.api.client.entity.JSONRPCRequestObject;
 import com.saplo.api.client.entity.JSONRPCResponseObject;
@@ -25,14 +26,7 @@ public interface Session {
 	void setParams(String params);
 
 	/**
-	 * Set a proxy to use for this transport connections
-	 * 
-	 * @param proxy
-	 */
-	void setProxy(ClientProxy proxy);
-		
-	/**
 	 * Close the session and release the resources if necessary
 	 */
-	void close();
+	void close() throws IOException;
 }
