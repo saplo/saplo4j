@@ -344,10 +344,8 @@ public class SaploText {
 			}
 		if(json.has("authors"))
 			saploText.setAuthors(json.optString("authors"));
-		if(json.has("collection_id")) {
-			SaploCollection saploCollection = new SaploCollection();
-			saploCollection.setId(json.optInt("collection_id"));
-			saploText.setCollection(saploCollection);
+		if(json.has("collection_id") && saploText.getCollection() == null) {
+			saploText.setCollection(saploText.getCollection());
 		}
 		if(json.has("ext_text_id"))
 			saploText.setExtId(json.optString("ext_text_id"));
