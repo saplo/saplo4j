@@ -3,7 +3,8 @@ package com.saplo.api.client.session;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.http.client.config.RequestConfig;
 
 import com.saplo.api.client.ClientError;
 import com.saplo.api.client.ClientProxy;
@@ -57,7 +58,7 @@ public class TransportRegistry {
 		registry.remove(scheme);
 	}
 
-	public Session createSession(String uriString, String params, ClientProxy proxy, Map<String, Object> httpParams) {
+	public Session createSession(String uriString, String params, ClientProxy proxy, RequestConfig requestConfig) {
 		try {
 			URI uri = new URI(uriString);
 			SessionFactory found = registry.get(uri.getScheme());
@@ -65,7 +66,7 @@ public class TransportRegistry {
 				throw new ClientError("Could not open URI '" + uriString
 						+ "'. Unknown scheme - '" + uri.getScheme() + "'." +
 				"Make sure you have registered your SessionFactory with this transport.");
-			return found.newSession(uri, params, proxy, httpParams);
+			return found.newSession(uri, params, proxy, requestConfig);
 		} catch (URISyntaxException e) {
 			throw new ClientError(e);
 		}
@@ -75,8 +76,9 @@ public class TransportRegistry {
 		/**
 		 * @param uri - URI used to open this session
 		 * @param params - jsessionid or access_token param
+		 * @param httpParams
 		 */
-		Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams);
+		Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig httpParams);
 	}
 
 }

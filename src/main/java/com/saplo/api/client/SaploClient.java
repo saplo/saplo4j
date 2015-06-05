@@ -1,8 +1,7 @@
 package com.saplo.api.client;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,7 +10,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.client.config.RequestConfig;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class SaploClient implements Serializable {
 	private final String secretKey;
 	private String accessToken;
 	private final boolean connect;
-	
+
 	// an ES for handling "async" methods
 	private ExecutorService es;
 
@@ -74,8 +73,8 @@ public class SaploClient implements Serializable {
 		private String endpoint = DEFAULT_ENDPOINT;
 		private String accessToken = "";
 		private ClientProxy proxy = null;
-		private Map<String, Object> httpParams = new HashMap<String, Object>();
 		private boolean connect = true;
+		private final RequestConfig.Builder requestConfig = RequestConfig.custom();
 		
 		public Builder(String apiKey, String secretKey) {
 			this.apiKey = apiKey;
@@ -99,14 +98,14 @@ public class SaploClient implements Serializable {
 		
 		public Builder proxy(ClientProxy proxy)
 		{ this.proxy = proxy;	return this; }
-		
+
 		public Builder socketTimeoutMillis(int socketTimeoutMillis) {
-			this.httpParams.put(CoreConnectionPNames.SO_TIMEOUT, socketTimeoutMillis);
+			requestConfig.setSocketTimeout(socketTimeoutMillis);
 			return this;
 		}
 		
 		public Builder connectionTimeoutMillis(int connectionTimeoutMillis) {
-			this.httpParams.put(CoreConnectionPNames.CONNECTION_TIMEOUT, connectionTimeoutMillis);
+			requestConfig.setConnectTimeout(connectionTimeoutMillis);
 			return this;
 		}
 		
@@ -152,7 +151,7 @@ public class SaploClient implements Serializable {
 		this.setupServerEnvironment();
 		
 		if(connect)
-		    createSession(builder.accessToken, builder.proxy, builder.httpParams);
+		    createSession(builder.accessToken, builder.proxy, builder.requestConfig.build());
 		
 		lock = new ReentrantLock();
 		sleeping = lock.newCondition();
@@ -193,22 +192,12 @@ public class SaploClient implements Serializable {
 	private final Lock lock;
 	private final Condition sleeping;
 
-	/**
-	 * Set a proxy for the client to communicate with the API
-	 * NOTE: set it before getting authed
-	 * 
-	 * @param proxy - a {@link ClientProxy} instance
-	 */
-	public void setProxy(ClientProxy proxy) {
-		session.setProxy(proxy);
-	}
-
 	/*
 	 * Get authenticated and store the accessToken in the session
 	 */
-	private synchronized void createSession(String accToken, ClientProxy proxy, Map<String, Object> httpParams) throws SaploClientException {
+	private synchronized void createSession(String accToken, ClientProxy proxy, RequestConfig requestConfig) throws SaploClientException {
 		session = TransportRegistry.getTransportRegistryInstance()
-				.createSession(endpoint, "access_token=" + accToken, proxy, httpParams);
+				.createSession(endpoint, "access_token=" + accToken, proxy, requestConfig);
 
 		if(accToken != null && accToken.length() > 0) {
 			this.accessToken = accToken;
@@ -335,10 +324,13 @@ public class SaploClient implements Serializable {
 
 		sendAndReceive(new JSONRPCRequestObject(getNextId(), "auth.invalidateToken", params));
 
-		if (session != null)
+		if (session != null) try {
 			session.close();
+		} catch (IOException e) {
+			throw new SaploClientException(e);
+		}
 
-		if(ssl)
+	    if(ssl)
 			HTTPSSession.deregister(TransportRegistry.getTransportRegistryInstance());
 		else
 			HTTPSessionApache.deregister(TransportRegistry.getTransportRegistryInstance());
@@ -362,7 +354,6 @@ public class SaploClient implements Serializable {
 	/**
 	 * Send message to server and receive response.
 	 * 
-	 * @param message - a JSONRPCRequestObject to send to the server (API)
 	 * @return JSONRPCResponseObject with response params.
 	 * 
 	 * @throws SaploClientException 

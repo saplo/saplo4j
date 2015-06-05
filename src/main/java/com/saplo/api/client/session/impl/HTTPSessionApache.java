@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -19,18 +17,18 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.routing.HttpRoute;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,28 +53,27 @@ public class HTTPSessionApache implements Session {
 	private static final String encoding = "UTF-8";
 	protected URI endpoint;
 	protected String params;
-	protected HttpClient httpClient;
-	protected HttpHost proxy;
+	private final RequestConfig requestConfig;
+	protected CloseableHttpClient httpClient;
 	protected ClientProxy clientProxy;
 	protected CredentialsProvider proxyCredentials;
-	private Map<String, Object> httpParams;
 
 	/**
 	 * Main constructor
-	 * 
-	 * @param endpoint - a saplo api endpoint
+	 *  @param endpoint - a saplo api endpoint
 	 * @param params - access_token="token_here"
+	 * @param requestConfig x
 	 */
-	public HTTPSessionApache(URI endpoint, String params, Map<String, Object> httpParams) {
-		this.endpoint = endpoint;
-		this.params = params;
-		this.httpParams = httpParams;
-		init();
+	public HTTPSessionApache(URI endpoint, String params, RequestConfig requestConfig) {
+		this(endpoint, params, null, requestConfig);
 	}
 	
-	public HTTPSessionApache(URI uri, String params, ClientProxy clientProxy, Map<String, Object> httpParams) {
-		this(uri, params, httpParams);
-		this.setProxy(clientProxy);
+	public HTTPSessionApache(URI endPoint, String params, ClientProxy clientProxy, RequestConfig requestConfig) {
+		this.clientProxy = clientProxy;
+		this.endpoint = endPoint;
+		this.params = params;
+		this.requestConfig = requestConfig;
+		init();
 	}
 
 	/*
@@ -84,7 +81,7 @@ public class HTTPSessionApache implements Session {
 	 */
 	protected void init() {
 
-		PoolingClientConnectionManager cm = new PoolingClientConnectionManager(registerScheme());
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registerScheme());
 		
 		// increase max total connection
 		cm.setMaxTotal(50);
@@ -92,28 +89,29 @@ public class HTTPSessionApache implements Session {
 		// increase max connections for our endpoint
 		HttpHost saploHost = new HttpHost(endpoint.getHost(), (endpoint.getPort() > 0 ? endpoint.getPort() : 80));
 		cm.setMaxPerRoute(new HttpRoute(saploHost), 40);
-	
-		this.httpClient = new DefaultHttpClient(cm);
-		
-		//Set connection timeout params
-		HttpParams params = httpClient.getParams();
-		for(Iterator<String> iterator = this.httpParams.keySet().iterator(); iterator.hasNext();) {
-			String key = iterator.next();
-			params.setParameter(key, this.httpParams.get(key));
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
+				.setConnectionManager(cm)
+				.setDefaultRequestConfig(requestConfig);
+		if (clientProxy != null) {
+			HttpHost proxy = new HttpHost(clientProxy.getHost(), clientProxy.getPort());
+			httpClientBuilder.setProxy(proxy);
+			if (clientProxy.isSecure()) {
+				proxyCredentials = new BasicCredentialsProvider();
+				proxyCredentials.setCredentials(new AuthScope(clientProxy.getHost(), clientProxy.getPort()), new UsernamePasswordCredentials(clientProxy.getUsername(), clientProxy.getPassword()));
+				httpClientBuilder.setDefaultCredentialsProvider(proxyCredentials);
+			}
 		}
 
+		this.httpClient = httpClientBuilder.build();
 	}
 	
 	/*
 	 * This method will be overridden by the SSL implementation to register an SSL socket factory
 	 */
-	protected SchemeRegistry registerScheme() {
-		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(
-				new Scheme("http", (endpoint.getPort() > 0 ? endpoint.getPort() : 80),
-						PlainSocketFactory.getSocketFactory()));
-		
-		return schemeRegistry;
+	protected Registry<ConnectionSocketFactory> registerScheme() {
+		return RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", new PlainConnectionSocketFactory())
+				.build();
 	}
 
 	/**
@@ -188,39 +186,18 @@ public class HTTPSessionApache implements Session {
 		this.params = params;
 	}
 
-	/**
-	 * Set a proxy of type ClientProxy to use for this transport connections
-	 * 
-	 * @param proxy
-	 */
-	public void setProxy(ClientProxy clientProxy) {
-		if(null == clientProxy)
-			return;
-		
-		this.clientProxy = clientProxy;
-		this.proxy = new HttpHost(clientProxy.getHost(), clientProxy.getPort());
-		if(clientProxy.isSecure()) {
-			proxyCredentials = new BasicCredentialsProvider();
-			proxyCredentials.setCredentials(
-					new AuthScope(clientProxy.getHost(), clientProxy.getPort()),
-					new UsernamePasswordCredentials(clientProxy.getUsername(), clientProxy.getPassword()));
-			((DefaultHttpClient)httpClient).setCredentialsProvider(proxyCredentials);
-		}
-		
-		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, this.proxy);
-	}
 
 	/**
 	 * Close all the clients and clear the pool.
 	 */
-	public synchronized void close() {
-		httpClient.getConnectionManager().shutdown();
+	public synchronized void close() throws IOException {
+		httpClient.close();
 	}
 
 	static class SessionFactoryImpl implements SessionFactory {
 		volatile HashMap<URI, Session> sessionMap = new HashMap<URI, Session>();
 
-		public Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
+		public Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig httpParams) {
 			Session session = sessionMap.get(uri);
 			if (session == null) {
 				synchronized (sessionMap) {

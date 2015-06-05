@@ -5,11 +5,12 @@ package com.saplo.api.client.session.impl;
 
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 
 import com.saplo.api.client.ClientProxy;
 import com.saplo.api.client.session.Session;
@@ -22,38 +23,35 @@ import com.saplo.api.client.session.TransportRegistry.SessionFactory;
  */
 public class HTTPSSession extends HTTPSessionApache {
 
-	public HTTPSSession(URI uri, String params, Map<String, Object> httpParams) {
-		super(uri, params, httpParams);
+	public HTTPSSession(URI uri, String params, RequestConfig requestConfig) {
+		super(uri, params, requestConfig);
 	}
 
-	public HTTPSSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
-		super(uri, params, proxy, httpParams);
+	public HTTPSSession(URI uri, String params, ClientProxy proxy, RequestConfig requestConfig) {
+		super(uri, params, proxy, requestConfig);
 	}
 
 	@Override
-	protected SchemeRegistry registerScheme() {
-		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		schemeRegistry.register(
-				new Scheme("https", (endpoint.getPort() > 0 ? endpoint.getPort() : 443), 
-						SSLSocketFactory.getSocketFactory()));
-		
-		return schemeRegistry;
+	protected Registry<ConnectionSocketFactory> registerScheme() {
+		Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+			.register("https", SSLConnectionSocketFactory.getSocketFactory()).build();
+		return socketFactoryRegistry;
 	}
 	
 	
 	static class SessionFactoryImpl implements SessionFactory {
 		volatile HashMap<URI, Session> sessionMap = new HashMap<URI, Session>();
 		
-		public Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
+		public Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig requestConfig) {
 			Session session = sessionMap.get(uri);
 			if (session == null) {
 				synchronized (sessionMap) {
 					session = sessionMap.get(uri);
 					if(session == null) {
 						if(null != proxy)
-							session = new HTTPSSession(uri, params, proxy, httpParams);
+							session = new HTTPSSession(uri, params, proxy, requestConfig);
 						else
-							session = new HTTPSSession(uri, params, httpParams);
+							session = new HTTPSSession(uri, params, requestConfig);
 						sessionMap.put(uri, session);
 					}
 				}

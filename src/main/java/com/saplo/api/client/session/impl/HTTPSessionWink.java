@@ -2,10 +2,10 @@ package com.saplo.api.client.session.impl;
 
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpStatus;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.wink.client.ClientConfig;
 import org.apache.wink.client.ClientResponse;
 import org.apache.wink.client.Resource;
@@ -109,7 +109,7 @@ public class HTTPSessionWink implements Session {
 	static class SessionFactoryImpl implements SessionFactory {
 		volatile HashMap<URI, Session> sessionMap = new HashMap<URI, Session>();
 
-		public Session newSession(URI uri, String params, ClientProxy proxy, Map<String, Object> httpParams) {
+		public Session newSession(URI uri, String params, ClientProxy proxy, RequestConfig httpParams) {
 			Session session = sessionMap.get(uri);
 			if (session == null) {
 				synchronized (sessionMap) {
